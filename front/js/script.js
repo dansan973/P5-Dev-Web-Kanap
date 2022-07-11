@@ -7,7 +7,7 @@ fetch("http://localhost:3000/api/products", {
     "headers": {}
 })
 
-
+// recuperation  des "products"
 .then(response => {
         return response.json()
     })
@@ -16,11 +16,14 @@ fetch("http://localhost:3000/api/products", {
         listProductsInHtml(products)
 
     })
+    // traitement erreurs
     .catch(err => console.error(err));
 
+// retour des produits api
 function listProductsInHtml(products) {
     let items = document.getElementById("items")
 
+    //   injection des produits avec createElement puis appendChild
     for (let index in products) {
         let a = document.createElement("a")
         a.setAttribute("href", "./product.html?id=" + products[index]._id)
