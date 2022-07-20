@@ -217,7 +217,8 @@ const form = document.querySelector(".cart__order__form")
 
 function setlistenerForm() {
 
-    form.testFirstName.addEventListener("change", function() {
+
+    form.firstName.addEventListener("change", function() {
         if (testFirstName(form.firstName.value)) {
             let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
             firstNameErrorMsg.innerText = ""
@@ -229,7 +230,7 @@ function setlistenerForm() {
     })
 
 
-    form.testLasttName.addEventListener("change", function() {
+    form.lastName.addEventListener("change", function() {
         if (testLastName(form.lastName.value)) {
             let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
             lastNameErrorMsg.innerText = ""
@@ -240,8 +241,8 @@ function setlistenerForm() {
         }
     })
 
-    form.testAddress.addEventListener("change", function() {
-        if (testAddress(form.email.value)) {
+    form.address.addEventListener("change", function() {
+        if (testAddress(form.address.value)) {
             let addressErrorMsg = document.getElementById("addressErrorMsg")
             addressErrorMsg.innerText = ""
         } else {
@@ -272,13 +273,14 @@ function setlistenerForm() {
         }
     })
 }
+
 setlistenerForm()
 
 
 
 
 
-// l'evenement submit order
+// écoute de l'evenement submit order
 
 form.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -286,23 +288,67 @@ form.addEventListener("submit", function(e) {
 
     // creation "contact" données utilisateur
     const contact = {
-            firstName: form.firstName.value,
-            lastName: form.lastName.value,
-            address: form.address.value,
-            city: form.city.value,
-            email: form.mail.value,
-        }
-        // verification du contenu formulaire 
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        address: form.address.value,
+        city: form.city.value,
+        email: form.email.value,
+    }
 
-    if (validateEmail(form.mail.value) && cityTest(form.city.value) && )
+    // verification du contenu formulaire 
 
+    if (testFirstName(form.firstName.value) &&
+        testLastName(form.lastName.value) &&
+        testAddress(form.address.value) &&
+        testCity(form.city.value) &&
+        validateEmail(form.email.value)) {
 
-    //creation array des produits commandés
+        order(contact)
 
-    // élément  "contact" et produits commandés
-
-    // appel API et envoi data page confirmation
-
-
+    } else {
+        alert("Merci de vérifier le contenu de votre formulaire");
+        return;
+    }
 
 })
+
+function order(contact) {
+    //creation de l'array des produits de la commande
+    let products = [];
+    for (let p of canapes) {
+        products.push(p.id);
+    }
+
+
+    // élément paquet qui contient  "contact" et produits commandés
+    let pack = {
+        contact: contact,
+        products: products
+    }
+
+
+
+    const options = {
+        method: "POST",
+        body: JSON.stringify(pack),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+
+    // On appelle l'api
+    fetch("http://localhost:3000/api/products/order", options)
+
+    .then((response) => {
+            return response.json();
+        })
+        // Envoie des données à la page confirmation
+        .then((data) => {
+            window.location.href = `confirmation.html?orderId=${data.orderId}`;
+        })
+
+    // traitement erreur
+    .catch((error) => {
+        alert(error);
+    })
+}
