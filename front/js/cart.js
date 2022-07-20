@@ -130,24 +130,18 @@ cart.forEach((product) => {
 
 
 
-            // modifification quantité avec addEventListener("change",fonction)
-            //remplacement dans le tableau( splice) puis reactualistion page
+            // modifification quantité 
+            //remplacement dans le tableau puis reactualistion page
 
             inputValue.addEventListener("change", (event) => {
                 const indexPosition = canapes.findIndex((item) => {
                     return item.color === canape.color && item.id === canape.id
                 })
                 if (indexPosition === -1)
-                    return
-
-                canapes[indexPosition].quantity = parseInt(event.target.value)
-
-
+                    return canapes[indexPosition].quantity = parseInt(event.target.value)
                 console.log(event.target.value)
-
                 const newCart = canapes.map((canape) => {
                     return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
-
                 })
                 setCart(newCart)
                 totalPrice()
@@ -156,33 +150,23 @@ cart.forEach((product) => {
 
 
 
-            // supprimer un item avec(elementClosest())
-            //remplacement dans le tableau( splice) puis reactualistion page
-
-
+            // supprimer un item remplacement dans le tableau( splice) puis reactualistion page
 
             pDel.addEventListener("click", (event) => {
                 const indexPosition = canapes.findIndex((del) => {
-                        return del.color === canape.color && del.id === canape.id
-                    })
-                    //remove 
+                    return del.color === canape.color && del.id === canape.id
+                })
                 canapes.splice(indexPosition, 1)
                 const newCart = canapes.map((canape) => {
-                        return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
-
-                    })
-                    //local
+                    return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
+                })
                 setCart(newCart)
                 totalPrice()
-                    //dom
                 cartItems.removeChild(article)
-
-
             })
 
 
             //affichage html du  prix total 
-
             totalPrice()
         })
 })
@@ -192,49 +176,133 @@ cart.forEach((product) => {
 
 // Récupérer les infos de l'utilisateur
 
-function testFirstName() {
-    let firstName = document.getElementById("firstName");
-    //minuscules, majuscules, les espaces et les tirets, chaine entre 3 et 20 caractères
+// check firstname minuscules, majuscules, les espaces et les tirets, chaine entre 3 et 20 caractères
+function testFirstName(inputText) {
     let regexFirstName = /^[a-zA-Z\s-]{3,20}$/;
-
-    // addEnventListener 
-    firstName.addEventListener("change", function() {
-        // Si les conditions sont valides
-        if (regexFirstName.test(firstName.value) && firstName.value.length >= 3 && firstName.value.length < 20 && firstName.value !== "") {
-            letfirstNameErrorMsg = document.getElementById("firstNameErrorMsg");
-            firstNameErrorMsg.innerText = "";
-        }
+    return regexFirstName.test(inputText)
+}
 
 
-        // sinon message d'erreur
-        else {
+// check lastname minuscules, majuscules, les espaces et les tirets, chaine entre 3 et 20 caractères
+function testLastName(inputText) {
+    let regexLastName = /^[a-zA-Z\s-]{3,20}$/;
+    return regexLastName.test(inputText)
+}
+
+
+//check adresse  minuscules, majuscules, les chiffres, les espaces, les tirets et les apostrophes
+function testAddress(inputText) {
+    let regexAddress = /^[a-z'A-Z'0-9-\s]+$/;
+    return regexAddress.test(inputText)
+}
+
+
+//check ville les minuscules, majuscules, les chiffres, les espaces, les tirets
+function testCity(inputText) {
+    let regexCity = /^[a-zA-Z0-9-\s]+$/;
+    return regexCity.test(inputText)
+}
+
+
+
+// email check /minuscules, majuscules, les espaces et quelquelques caractères speciaux
+function validateEmail(inputText) {
+    let regexEmail = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    return regexEmail.test(inputText)
+}
+
+
+// réponses regex et check formulaire 
+const form = document.querySelector(".cart__order__form")
+
+function setlistenerForm() {
+
+    form.testFirstName.addEventListener("change", function() {
+        if (testFirstName(form.firstName.value)) {
+            let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
+            firstNameErrorMsg.innerText = ""
+        } else {
             let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
-            firstNameErrorMsg.innerText = "vérifier votre prénom";
+            firstNameErrorMsg.innerText = "vérifiez votre prénom";
             return;
         }
     })
 
 
+    form.testLasttName.addEventListener("change", function() {
+        if (testLastName(form.lastName.value)) {
+            let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
+            lastNameErrorMsg.innerText = ""
+        } else {
+            let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+            lastNameErrorMsg.innerText = "vérifiez votre nom";
+            return;
+        }
+    })
 
+    form.testAddress.addEventListener("change", function() {
+        if (testAddress(form.email.value)) {
+            let addressErrorMsg = document.getElementById("addressErrorMsg")
+            addressErrorMsg.innerText = ""
+        } else {
+            let addressErrorMsg = document.getElementById("addressErrorMsg");
+            addressErrorMsg.innerText = "vérifiez votre adresse";
+            return;
+        }
+    })
+    form.city.addEventListener("change", function() {
+        if (testCity(form.city.value)) {
+            let cityErrorMsg = document.getElementById("cityErrorMsg");
+            cityErrorMsg.innerText = "";
+        } else {
+            let cityErrorMsg = document.getElementById("cityErrorMsg");
+            cityErrorMsg.innerText = "vérifiez votre ville";
+            return;
+        }
+    })
 
-
-    // lastname
-
-
-
-
-
-
-    // email check /minuscules, majuscules, les espaces et quelquelques caractères speciaux
-
-
-    /*      function ValidateEmail(inputText)
-            {
-    	    var mailformat = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-    	    if(inputText.value.match(mailformat))
-    	    {
-    		alert("This is not a valid email address");
-    		return false;
-    		}
-    */
+    form.email.addEventListener("change", function() {
+        if (validateEmail(form.email.value)) {
+            let emailErrorMsg = document.getElementById("emailErrorMsg")
+            emailErrorMsg.innerText = ""
+        } else {
+            let emailErrorMsg = document.getElementById("emailErrorMsg");
+            emailErrorMsg.innerText = "vérifiez votre email";
+            return;
+        }
+    })
 }
+setlistenerForm()
+
+
+
+
+
+// l'evenement submit order
+
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+
+    // creation "contact" données utilisateur
+    const contact = {
+            firstName: form.firstName.value,
+            lastName: form.lastName.value,
+            address: form.address.value,
+            city: form.city.value,
+            email: form.mail.value,
+        }
+        // verification du contenu formulaire 
+
+    if (validateEmail(form.mail.value) && cityTest(form.city.value) && )
+
+
+    //creation array des produits commandés
+
+    // élément  "contact" et produits commandés
+
+    // appel API et envoi data page confirmation
+
+
+
+})
