@@ -22,6 +22,7 @@ function totalPrice() {
 
     const tPrice = document.getElementById('totalPrice')
     const tQuantity = document.getElementById('totalQuantity')
+    console.log(canapes)
     tPrice.innerHTML = price
     tQuantity.innerHTML = totalQuantity
 }
@@ -134,13 +135,15 @@ cart.forEach((product) => {
             //remplacement dans le tableau puis reactualistion page
 
             inputValue.addEventListener("change", (event) => {
+                console.log(event)
                 const indexPosition = canapes.findIndex((item) => {
                     return item.color === canape.color && item.id === canape.id
                 })
-                if (indexPosition === -1)
-                    return canapes[indexPosition].quantity = parseInt(event.target.value)
+                if (indexPosition !== -1)
+                    canapes[indexPosition].quantity = parseInt(event.target.value)
                 console.log(event.target.value)
                 const newCart = canapes.map((canape) => {
+
                     return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
                 })
                 setCart(newCart)
