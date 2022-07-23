@@ -11,18 +11,17 @@ function setCart(cart) {
 
 }
 
-function totalPrice() {
+function totalPriceQuantity() {
     let price = 0;
     let totalQuantity = 0
     for (let c of canapes) {
         price += c.price * c.quantity;
         totalQuantity += c.quantity
     }
-    console.log("totalprice")
+
 
     const tPrice = document.getElementById('totalPrice')
     const tQuantity = document.getElementById('totalQuantity')
-    console.log(canapes)
     tPrice.innerHTML = price
     tQuantity.innerHTML = totalQuantity
 }
@@ -135,19 +134,29 @@ cart.forEach((product) => {
             //remplacement dans le tableau puis reactualistion page
 
             inputValue.addEventListener("change", (event) => {
-                console.log(event)
+
+                const newQuantity = parseInt(event.target.value)
+
+
                 const indexPosition = canapes.findIndex((item) => {
                     return item.color === canape.color && item.id === canape.id
                 })
-                if (indexPosition !== -1)
+                if (indexPosition !== -1) {
+                    if (newQuantity < 1 || newQuantity > 100) {
+                        event.target.value = canapes[indexPosition].quantity
+                        alert("quantité invalide")
+                        return
+                    }
                     canapes[indexPosition].quantity = parseInt(event.target.value)
-                console.log(event.target.value)
+                }
+
+
                 const newCart = canapes.map((canape) => {
 
                     return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
                 })
                 setCart(newCart)
-                totalPrice()
+                totalPriceQuantity()
 
             })
 
@@ -164,13 +173,13 @@ cart.forEach((product) => {
                     return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
                 })
                 setCart(newCart)
-                totalPrice()
+                totalPriceQuantity()
                 cartItems.removeChild(article)
             })
 
 
             //affichage html du  prix total 
-            totalPrice()
+            totalPriceQuantity()
         })
 })
 
