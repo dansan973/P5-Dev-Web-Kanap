@@ -1,11 +1,11 @@
 //recuperer le localstorage
 
 
-// creation tab et du panier
+// creation array (parse) et se premunit du null en créant le tableau vide prêt à etre rempli
 function getCart() {
     return JSON.parse(localStorage.getItem("cart")) || [];
 }
-
+//reconvertit en chaine de caractères le cart
 function setCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 
@@ -28,14 +28,14 @@ function totalPriceQuantity() {
 
 //recuperation localstorage
 let cart = getCart()
-    //creation tab global
+    //creation tab global// 
 let canapes = []
 
 
-//Alimentation du tableau à partir localstorage ezt API
+//Alimentation du array à partir localstorage et API if cart.length==0 then display("panier vide")
 cart.forEach((product) => {
     const cartItems = document.getElementById("cart__items");
-    const urlProduit = ` http://localhost:3000/api/products/${product.id}`;
+    const urlProduit = `http://localhost:3000/api/products/${product.id}`;
 
     // recuperation des elements et injection html avec createElement et appendChild
     fetch(urlProduit)
@@ -130,29 +130,24 @@ cart.forEach((product) => {
 
 
 
-            // modifification quantité 
-            //remplacement dans le tableau puis reactualistion page
-
+            // modifification quantité après écoute évennement
             inputValue.addEventListener("change", (event) => {
 
                 const newQuantity = parseInt(event.target.value)
-
-
                 const indexPosition = canapes.findIndex((item) => {
-                    return item.color === canape.color && item.id === canape.id
-                })
+                        return item.color === canape.color && item.id === canape.id
+                    })
+                    //si different de null verifie les conditions
                 if (indexPosition !== -1) {
-                    if (newQuantity < 1 || newQuantity > 100) {
+                    if (newQuantity < 1 || newQuantity > 100 || Number.isNaN(newQuantity)) {
                         event.target.value = canapes[indexPosition].quantity
                         alert("quantité invalide")
                         return
                     }
+                    // si conditions requises remplacement dans le array puis reactualistion page
                     canapes[indexPosition].quantity = parseInt(event.target.value)
                 }
-
-
                 const newCart = canapes.map((canape) => {
-
                     return { "id": canape.id, "color": canape.color, "quantity": canape.quantity }
                 })
                 setCart(newCart)

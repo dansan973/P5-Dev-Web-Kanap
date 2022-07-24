@@ -44,7 +44,7 @@ fetch("http://localhost:3000/api/products/" + id)
         kanapElements.kanapProduct();
 
     })
-    // on ecoute evenement avec  addEventL
+    // on ecoute evenement avec  addEventLS
 
 const addToCart = document.getElementById("addToCart");
 addToCart.addEventListener("click", () => {
@@ -60,8 +60,9 @@ addToCart.addEventListener("click", () => {
     }
 
     let quantity = parseInt(document.getElementById("quantity").value);
-    if (quantity <= 0 || quantity > 100) {
+    if (quantity <= 0 || quantity > 100 || Number.isNaN(quantity)) {
         alert("quantité invalide")
+
         return
     }
 
@@ -76,10 +77,11 @@ addToCart.addEventListener("click", () => {
         })
         // ajout du produit (findindex -1 pas de produit correspondant) ou uniquement quantité
     if (cartIndex == -1) cart.push(product);
-    else cart[cartIndex].quantity += product.quantity
 
-    console.log(cart)
+} else cart[cartIndex].quantity += product.quantity
 
-    //convertit en string(chaine de caractères)
-    localStorage.setItem("cart", JSON.stringify(cart));
+console.log(cart)
+
+//convertit en string(chaine de caractères)
+localStorage.setItem("cart", JSON.stringify(cart));
 })
